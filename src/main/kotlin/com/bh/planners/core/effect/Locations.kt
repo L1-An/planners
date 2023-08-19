@@ -72,11 +72,11 @@ fun Location.isInAABB(aa: Location, bb: Location): Boolean {
     val bbX = bb.x
     val bbY = bb.y
     val bbZ = bb.z
-    return if ( x !in (if (aaX < bbX) aaX..bbX else bbX..aaX)) {
+    return if (x !in aaX.coerceAtMost(bbX)..aaX.coerceAtLeast(bbX)) {
         false
-    } else if (y !in (if (aaY < bbY) aaY..bbY else bbY..aaY)) {
+    } else if (y !in aaY.coerceAtMost(bbY)..aaY.coerceAtLeast(bbY)) {
         false
-    } else z in (if (aaZ < bbZ) aaZ..bbZ else bbZ..aaZ)
+    } else z in aaZ.coerceAtMost(bbZ)..aaZ.coerceAtLeast(bbZ)
 }
 
 fun isInsideSector(target: Location, origin: Location, radius: Double, angle: Double): Boolean {

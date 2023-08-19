@@ -6,7 +6,6 @@ import com.bh.planners.core.effect.createAwaitVoidFuture
 import com.bh.planners.core.effect.isInAABB
 import com.bh.planners.core.selector.Selector
 import org.bukkit.util.Vector
-import taboolib.common.platform.function.submitAsync
 import java.util.concurrent.CompletableFuture
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -16,7 +15,8 @@ import kotlin.math.sqrt
  * Long 长
  * wide 宽
  * high 高
- * forward 向前偏移
+ * forward 前后偏移
+ * offsetY 上下偏移
  *
  * @rectangle Long wide high forward
  */
@@ -32,29 +32,32 @@ object Rectangle : Selector {
         val wide = data.read<Double>(1, "0.0")
         val high = data.read<Double>(2, "0.0")
         val forward = data.read<Double>(3, "0.0")
+        val offsetY = data.read<Double>(4, "0.0")
 
         return createAwaitVoidFuture {
 
-            location.world?.livingEntities?.forEach {
+            val entities = location.world?.livingEntities ?: return@createAwaitVoidFuture
 
-                submitAsync {
-                    val offset = sqrt(it.width.pow(2)*2)
+            entities.forEach {
 
-                    val vectorX1 = location.direction.clone().setY(0).normalize().multiply(forward+offset)
-                    val vectorY1 = Vector(0.0,-(high/2+it.height),0.0)
-                    val vectorZ1 = location.direction.clone().setY(0).crossProduct(Vector(0,1,0)).normalize().multiply(wide/2+offset)
+                val offset = sqrt(it.width.pow(2) * 2)
 
-                    val vector1 = location.clone().add(vectorX1).add(vectorY1).add(vectorZ1)
+                val vectorX1 = location.direction.setY(0).normalize()
+                val vectorZ1 = vectorX1.clone().crossProduct(Vector(0, 1, 0))
 
-                    val vectorX2 = location.direction.clone().setY(0).normalize().multiply(forward+long+offset)
-                    val vectorY2 = Vector(0.0,high/2-it.height,0.0)
-                    val vectorZ2 = location.direction.clone().setY(0).crossProduct(Vector(0,1,0)).normalize().multiply(-(wide/2+offset))
+                val loc1 = location.clone().add(vectorX1.multiply(forward + offset)).add(vectorZ1.multiply(-(wide / 2 + offset))).apply { y += offsetY }
 
-                    val vector2 = location.clone().add(vectorX2).add(vectorY2).add(vectorZ2)
+                val vectorX2 = location.direction.setY(0).normalize()
+                val vectorZ2 = vectorX2.clone().crossProduct(Vector(0, 1, 0))
 
-                    if (it.location.isInAABB(vector1, vector2).apply { data.context.player?.sendMessage("$this, ${it.location}") }) {
-                        data.container += it.toTarget()
-                    }
+                val loc2 = location.clone().add(vectorX2.multiply(forward + long + offset)).add(vectorZ2.multiply(wide / 2 + offset)).apply { y += (high + it.height + offsetY) }
+
+                data.context.player?.sendMessage("${loc1.x}|${loc1.y}|${loc1.z}, ${loc2.x}|${loc2.y}|${loc2.z}")
+
+                if (it.eyeLocation.isInAABB(loc1, loc2)
+                        .apply { data.context.player?.sendMessage("$location, ${data.context.player?.eyeLocation?.direction}, ${data.context.player?.eyeLocation}") }
+                ) {
+                    data.container += it.toTarget()
                 }
 
             }
