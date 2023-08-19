@@ -3,7 +3,6 @@ package com.bh.planners.core.selector.bukkit
 import com.bh.planners.core.effect.Target.Companion.getLocation
 import com.bh.planners.core.effect.Target.Companion.toTarget
 import com.bh.planners.core.effect.createAwaitVoidFuture
-import com.bh.planners.core.effect.getNearbyEntities
 import com.bh.planners.core.effect.isPointInEntitySector
 import com.bh.planners.core.selector.Selector
 import org.bukkit.Location
@@ -33,8 +32,8 @@ object Sector : Selector {
         location.yaw += yaw
 
         return createAwaitVoidFuture {
-            val nearbyEntities = location.getNearbyEntities(radius+10)
-            nearbyEntities.forEach { entity ->
+            val entities = location.world?.livingEntities ?: return@createAwaitVoidFuture
+            entities.forEach { entity ->
                 if (isPointInEntitySector(entity.eyeLocation, location, radius + sqrt( entity.width.pow( 2.0 ) * 2 ), angle)) {
                     if (data.isNon) {
                         data.container.removeIf { t -> t == entity }

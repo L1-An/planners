@@ -111,8 +111,8 @@ object PlannersAPI {
             return ExecuteResult.SUCCESS
         }
 
-        val preEvent = PlayerCastSkillEvents.Pre(player, session).apply { call() }
-        if (preEvent.isCancelled) {
+        val preEvent = PlayerCastSkillEvents.Pre(player, session)
+        if (!preEvent.call()) {
             PlayerCastSkillEvents.Failure(player, skill, ExecuteResult.CANCELED).call()
             return ExecuteResult.CANCELED
         }

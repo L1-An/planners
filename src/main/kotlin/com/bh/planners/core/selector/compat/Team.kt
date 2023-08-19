@@ -21,7 +21,7 @@ object Team : Selector {
         val container = Team.INSTANCE?.getContainer(player)
         if (container != null) {
             if (data.name.isNon()) {
-                data.container.removeIf { (it is Target.Entity) && container.isViewer(it.player!!) }
+                data.container.removeIf { (it is Target.Entity) && it.player?.let { player -> container.isViewer(player) } == true }
             } else {
                 data.container.addAll(container.getViewers().map { it.toTarget() })
             }

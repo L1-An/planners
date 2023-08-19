@@ -1,11 +1,12 @@
 package com.bh.planners.core.effect
 
 import com.bh.planners.api.PlannersOption
-import com.bh.planners.util.safeSync
 import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
+import taboolib.common.platform.function.isPrimaryThread
+import taboolib.common.platform.function.submit
 import taboolib.common5.Coerce
 import taboolib.module.effect.math.Matrix
 import java.util.concurrent.CompletableFuture
@@ -120,17 +121,23 @@ fun Location.getNearbyEntities(radius: Double): List<LivingEntity> {
 }
 
 fun createAwaitVoidFuture(block: () -> Unit): CompletableFuture<Void> {
-    createAwaitFuture {
+    return if (isPrimaryThread) {
         block()
+        CompletableFuture.completedFuture(null)
+    } else {
+        createAwaitFuture {
+            block()
+        }
+        CompletableFuture.completedFuture(null)
     }
-    return CompletableFuture.completedFuture(null)
 }
 
 fun <T> createAwaitFuture(block: () -> T): CompletableFuture<T> {
-    val future = CompletableFuture<T>()
-    safeSync {
-        future.complete(block())
+    if (isPrimaryThread) {
+        error("Cannot run sync task in main thread.")
     }
+    val future = CompletableFuture<T>()
+    submit { future.complete(block()) }
     return future
 }
 

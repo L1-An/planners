@@ -6,13 +6,13 @@ import com.bh.planners.core.effect.Target.Companion.getPlayer
 import com.bh.planners.core.pojo.Context
 import com.bh.planners.core.pojo.ScriptFactor
 import com.bh.planners.core.pojo.Skill
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import taboolib.common.platform.ProxyCommandSender
+import taboolib.common.platform.function.isPrimaryThread
+import taboolib.common.platform.function.submit
 import taboolib.common.platform.function.submitAsync
 import taboolib.common.platform.function.warning
-import taboolib.common.util.sync
 import taboolib.common5.Coerce
 import taboolib.module.kether.printKetherErrorMessage
 import java.util.*
@@ -93,7 +93,7 @@ fun List<String>.upperCase(): List<String> {
 }
 
 fun safeAsync(job: () -> Unit) {
-    if (Bukkit.isPrimaryThread()) {
+    if (isPrimaryThread) {
         submitAsync {
             job()
         }
@@ -103,9 +103,9 @@ fun safeAsync(job: () -> Unit) {
 }
 
 fun safeSync(job: () -> Unit) {
-    if (Bukkit.isPrimaryThread()) {
+    if (isPrimaryThread) {
         job()
     } else {
-        sync { job() }
+        submit { job() }
     }
 }
