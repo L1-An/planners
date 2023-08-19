@@ -29,7 +29,7 @@ object PlannersSkillCommand {
                 suggestion<ProxyCommandSender> { _, context ->
                     val player = Bukkit.getPlayerExact(context["player"])!!
                     if (player.hasJob) {
-                        player.plannersProfile.getSkills().map { it.key }
+                        player.plannersProfile.getSkills().filter { it.level >= 1 }.map { it.key }
                     } else emptyList()
                 }
                 execute<ProxyCommandSender> { _, context, argument ->

@@ -123,7 +123,7 @@ object ActionProfile : MultipleKetherParser("profile"){
      * profile mana-max
      */
     val maxmana = simpleKetherNow("max-mana","mana-max") {
-        ManaManager.INSTANCE.getMana(senderPlannerProfile()!!)
+        ManaManager.INSTANCE.getMaxMana(senderPlannerProfile()!!)
     }
 
     /**
@@ -142,7 +142,7 @@ object ActionProfile : MultipleKetherParser("profile"){
 
     // profile job
     val job = simpleKetherNow {
-        senderPlannerProfile()!!.job?.jobKey
+        senderPlannerProfile()!!.job?.name
     }
 
     // profile level

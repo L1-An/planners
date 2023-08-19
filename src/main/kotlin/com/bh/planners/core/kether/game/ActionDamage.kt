@@ -1,6 +1,5 @@
 package com.bh.planners.core.kether.game
 
-import com.bh.planners.api.PlannersOption
 import com.bh.planners.api.common.Demand
 import com.bh.planners.api.event.EntityEvents
 import com.bh.planners.core.effect.Target.Companion.getLivingEntity
@@ -11,7 +10,6 @@ import com.bh.planners.core.kether.game.damage.DamageType
 import com.bh.planners.util.eval
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
 import taboolib.common.platform.function.submit
 import taboolib.library.kether.ParsedAction
@@ -48,7 +46,6 @@ class ActionDamage {
                         frame.run(type).str last@{ type ->
                             val sourceEntity = source.firstLivingEntityTarget() ?: return@last
                             victims.forEachLivingEntity {
-                                if (sourceEntity.world.name in worlds && !sourceEntity.world.pvp && this is Player) return@forEachLivingEntity
                                 execute(this, sourceEntity, damage, DamageType.valueOf(type.uppercase()))
                             }
                         }
@@ -71,7 +68,6 @@ class ActionDamage {
                         val damageableModelId = demand.namespace
                         submit {
                             container.forEachLivingEntity {
-                                if (source.world.name in worlds && !source.world.pvp && this is Player) return@forEachLivingEntity
                                 // 跳转到战斗模型
                                 if (damageableModelId != "EMPTY") {
                                     DamageableDispatcher.submitDamageable(damageableModelId, source, this, demand)
@@ -100,8 +96,6 @@ class ActionDamage {
     }
 
     companion object {
-
-        val worlds = PlannersOption.root.getStringList("pvp-manage-world")
 
         /**
          * 对selector目标造成伤害

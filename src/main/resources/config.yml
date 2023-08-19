@@ -45,5 +45,3 @@ options:
     enable: true
     skill: true
     castSkill: "禁止释放"
-  pvp-manage-world:
-    - 'world'
