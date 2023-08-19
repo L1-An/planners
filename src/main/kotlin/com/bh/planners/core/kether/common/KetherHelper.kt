@@ -105,12 +105,12 @@ object KetherHelper {
 
     @Suppress("UNCHECKED_CAST")
     fun registerCombinationKetherParser(id: String, combinationKetherParser: CombinationKetherParser) {
-        val id = arrayOf(id, *combinationKetherParser.id)
+        val ids = arrayOf(id, *combinationKetherParser.id)
         val namespace = combinationKetherParser.namespace
         if (combinationKetherParser is Stateable) {
             combinationKetherParser.onInit()
         }
-        registerCombinationKetherParser(id, namespace, combinationKetherParser.run() as ScriptActionParser<Any?>)
+        registerCombinationKetherParser(ids, namespace, combinationKetherParser.run() as ScriptActionParser<Any?>)
     }
 
     fun registerCombinationKetherParser(id: String, namespace: String, parser: ScriptActionParser<Any?>) {
