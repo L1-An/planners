@@ -17,6 +17,7 @@ import kotlin.math.sqrt
  * high 高
  * forward 前后偏移
  * offsetY 上下偏移
+ * pitch 是否根据pitch改变长方形方向
  *
  * @rectangle Long wide high forward
  */
@@ -33,6 +34,7 @@ object Rectangle : Selector {
         val high = data.read<Double>(2, "0.0")
         val forward = data.read<Double>(3, "0.0")
         val offsetY = data.read<Double>(4, "0.0")
+        val pitch = data.read<Boolean>(5, "false")
 
         return createAwaitVoidFuture {
 
@@ -42,6 +44,9 @@ object Rectangle : Selector {
 
                 val offset = sqrt(it.width.pow(2) * 2)
 
+                if (pitch) {
+                    location.pitch = 0f
+                }
                 val vectorX1 = location.direction.setY(0).normalize()
                 val vectorZ1 = vectorX1.clone().crossProduct(Vector(0, 1, 0))
 
@@ -52,11 +57,7 @@ object Rectangle : Selector {
 
                 val loc2 = location.clone().add(vectorX2.multiply(forward + long + offset)).add(vectorZ2.multiply(wide / 2 + offset)).apply { y += (high + it.height + offsetY) }
 
-                data.context.player?.sendMessage("${loc1.x}|${loc1.y}|${loc1.z}, ${loc2.x}|${loc2.y}|${loc2.z}")
-
-                if (it.eyeLocation.isInAABB(loc1, loc2)
-                        .apply { data.context.player?.sendMessage("$location, ${data.context.player?.eyeLocation?.direction}, ${data.context.player?.eyeLocation}") }
-                ) {
+                if (it.eyeLocation.isInAABB(loc1, loc2)) {
                     data.container += it.toTarget()
                 }
 
