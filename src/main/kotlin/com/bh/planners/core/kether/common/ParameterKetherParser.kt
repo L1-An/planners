@@ -17,7 +17,7 @@ abstract class ParameterKetherParser(vararg id: String) : SimpleKetherParser(*id
         return scriptParser {
             val argument = it.nextParsedAction()
             it.switch {
-                this@ParameterKetherParser.method.forEach { id, parser ->
+                this@ParameterKetherParser.method.forEach { (id, parser) ->
                     case(id) { parser.parser.invoke(it, argument) }
                 }
                 other { mainParser?.parser?.invoke(it, argument) }

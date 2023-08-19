@@ -32,9 +32,9 @@ object ActionSelector : ParameterKetherParser("selector") {
 
     // selector <id> list
     val list = argumentKetherParser { argument ->
-        actionNow {
+        actionFuture {
             run(argument).str { argument ->
-                variables().get<Target.Container>(argument).orElseGet { Target.Container() }
+                it.complete(variables().get<Target.Container>(argument).orElseGet { Target.Container() })
             }
         }
     }
@@ -76,9 +76,9 @@ object ActionSelector : ParameterKetherParser("selector") {
 
     // selector <id> size
     val size = argumentKetherParser { argument ->
-        actionNow {
+        actionFuture {
             run(argument).str { argument ->
-                variables().get<Target.Container>(argument)?.get()?.size ?: 0
+                it.complete(variables().get<Target.Container>(argument).orElseGet { Target.Container() }.size)
             }
         }
     }
