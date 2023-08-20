@@ -2,8 +2,10 @@ package com.bh.planners.core.kether.compat.adyeshach
 
 import com.bh.planners.api.entity.ProxyAdyeshachEntity
 import com.bh.planners.core.effect.Target
+import com.bh.planners.core.effect.Target.Companion.getLocation
 import com.bh.planners.core.kether.*
 import com.bh.planners.core.kether.common.CombinationKetherParser
+import com.bh.planners.core.kether.common.KetherHelper
 import com.bh.planners.core.kether.common.ParameterKetherParser
 import ink.ptms.adyeshach.common.entity.EntityTypes
 import taboolib.library.kether.ParsedAction
@@ -12,21 +14,19 @@ import java.util.*
 
 @CombinationKetherParser.Used
 object ActionAdyeshach : ParameterKetherParser("ady", "adyeshach") {
-    val spawn = argumentKetherParser {
-        val reader = this
-        actionNow {
-            run(it).str {
+
+    val spawn = scriptParser {
+        val type = it.nextParsedAction()
+        val name = it.nextParsedAction()
+        val timeout = it.nextParsedAction()
+        val selector = it.nextSelectorOrNull()
+        actionFuture {
+            run(type).str {
                 val type = EntityTypes.valueOf(it.uppercase(Locale.getDefault()))
-                run(reader.nextParsedAction()).str { name ->
-                    run(reader.nextParsedAction()).long { timer ->
-                        containerOrSender(reader.nextSelectorOrNull()).thenAccept { container ->
-                            val entity = container.filterIsInstance<Target.Location>().map { it.value }
-                            ActionAdyeshachSpawn().apply {
-                                this.type = type
-                                this.name = name
-                                this.timeout = timer
-                                this.selector = entity
-                            }
+                run(name).str { name ->
+                    run(timeout).long { timeout ->
+                        containerOrSender(selector).thenAccept { container ->
+                            ActionAdyeshachSpawn.spawn(type,container.mapNotNull { it.getLocation() },name,timeout)
                         }
                     }
                 }

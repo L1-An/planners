@@ -115,7 +115,6 @@ class ActionGermEffectProjectile : ScriptAction<Void>() {
                     }
 
                     effect.setOnEntity {
-                        info("on hit $it")
                         (context as? Session)?.handleIncident(onhit, IncidentGermProjectileHitEntity(source, it))
                     }
 

@@ -15,7 +15,7 @@ object ActionFlag : ParameterKetherParser("flag", "data") {
     val main = argumentKetherParser("get") { argument ->
         val default = nextOptionalAction(arrayOf("default", "def"), "null")!!
         val selector = nextSelectorOrNull()
-        actionNow {
+        actionFuture {
             run(argument).str { id ->
                 run(default).thenApply { default ->
                     containerOrSender(selector).thenApply { container ->

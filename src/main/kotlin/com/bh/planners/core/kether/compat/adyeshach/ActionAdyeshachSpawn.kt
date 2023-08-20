@@ -15,19 +15,9 @@ import taboolib.module.kether.ScriptFrame
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-class ActionAdyeshachSpawn : ScriptAction<Target.Container>() {
+object ActionAdyeshachSpawn{
 
-    lateinit var type: EntityTypes
-    lateinit var name: String
-    var timeout: Long = -1
-    lateinit var selector: List<Location>
-
-    fun spawn(
-        entityType: EntityTypes,
-        locations: List<Location>,
-        name: String,
-        tick: Long
-    ): CompletableFuture<List<ProxyEntity>> {
+    fun spawn(entityType: EntityTypes, locations: List<Location>, name: String, tick: Long): CompletableFuture<List<ProxyEntity>> {
         val future = CompletableFuture<List<ProxyEntity>>()
         spawn(entityType, locations, block = { it.setCustomName(name) }).thenAccept {
             it.forEach { register(it, tick) }
@@ -36,11 +26,7 @@ class ActionAdyeshachSpawn : ScriptAction<Target.Container>() {
         return future
     }
 
-    fun spawn(
-        entityType: EntityTypes,
-        locations: List<Location>,
-        block: Consumer<EntityInstance>
-    ): CompletableFuture<List<ProxyAdyeshachEntity>> {
+    fun spawn(entityType: EntityTypes, locations: List<Location>, block: Consumer<EntityInstance>): CompletableFuture<List<ProxyAdyeshachEntity>> {
         val future = CompletableFuture<List<ProxyAdyeshachEntity>>()
         safeSync {
             future.complete(locations.map { spawn(entityType, it, block) })
@@ -61,16 +47,5 @@ class ActionAdyeshachSpawn : ScriptAction<Target.Container>() {
             }
         }
         return "ady:${entity.uniqueId}"
-    }
-
-    override fun run(frame: ScriptFrame): CompletableFuture<Target.Container> {
-        val container = Target.Container()
-        val future = CompletableFuture<Target.Container>()
-        spawn(type, selector, name, timeout).thenAccept {
-            container += it.map { it.target() }
-            future.complete(container)
-        }
-
-        return future
     }
 }
