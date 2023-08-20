@@ -8,11 +8,6 @@ import taboolib.common.OpenResult
 import taboolib.module.kether.*
 
 
-/**
- * selector
- *
- *
- */
 @CombinationKetherParser.Used
 object ActionSelector : ParameterKetherParser("selector") {
 
@@ -22,9 +17,9 @@ object ActionSelector : ParameterKetherParser("selector") {
     val set = argumentKetherParser("to", "they", "at", "the") { argument ->
         val action = nextParsedAction()
         actionNow {
-            run(argument).str { argument ->
+            run(argument).str { id ->
                 run(action).thenAccept { value ->
-                    variables()[argument] = parseTargetContainer(value!!, getContext())
+                    variables()[id] = parseTargetContainer(value!!, getContext())
                 }
             }
         }
@@ -33,26 +28,27 @@ object ActionSelector : ParameterKetherParser("selector") {
     // selector <id> list
     val list = argumentKetherParser { argument ->
         actionFuture {
-            run(argument).str { argument ->
-                it.complete(variables().get<Target.Container>(argument).orElseGet { Target.Container() })
+            run(argument).str { id ->
+                it.complete(variables().get<Target.Container>(id).orElseGet { Target.Container() })
             }
         }
     }
 
+    //默认
     val other = list
 
     // selector <id> remove
-    val remove = argumentKetherNow { argument ->
-        variables().remove(argument.toString())
+    val remove = argumentKetherNow { id ->
+        variables().remove(id.toString())
     }
 
     // selector <id> unmerge they <selector>
     val unmerge = argumentKetherParser { argument ->
         val selector = nextSelectorOrNull()
         actionNow {
-            run(argument).str { argument ->
+            run(argument).str { id ->
                 containerOrEmpty(selector).thenAccept { selector ->
-                    variables().get<Target.Container>(argument).ifPresent {
+                    variables().get<Target.Container>(id).ifPresent {
                         it.unmerge(selector)
                     }
                 }
@@ -64,9 +60,9 @@ object ActionSelector : ParameterKetherParser("selector") {
     val merge = argumentKetherParser { argument ->
         val selector = nextSelectorOrNull()
         actionNow {
-            run(argument).str { argument ->
+            run(argument).str { id ->
                 containerOrEmpty(selector).thenAccept { selector ->
-                    variables().get<Target.Container>(argument).ifPresent {
+                    variables().get<Target.Container>(id).ifPresent {
                         it.merge(selector)
                     }
                 }
@@ -77,8 +73,8 @@ object ActionSelector : ParameterKetherParser("selector") {
     // selector <id> size
     val size = argumentKetherParser { argument ->
         actionFuture {
-            run(argument).str { argument ->
-                it.complete(variables().get<Target.Container>(argument).orElseGet { Target.Container() }.size)
+            run(argument).str { id ->
+                it.complete(variables().get<Target.Container>(id).orElseGet { Target.Container() }.size)
             }
         }
     }

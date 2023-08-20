@@ -107,7 +107,7 @@ interface Target {
 
         fun unmerge(container: Container): Container {
             if (container.isEmpty()) return this
-            removeIf { container.contains(it) }
+            removeIf { it in container }
             return this
         }
 
