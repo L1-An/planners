@@ -53,14 +53,14 @@ object ActionFlag : ParameterKetherParser("flag", "data") {
         val action = this.nextParsedAction()
         val selector = nextSelectorOrNull()
         actionNow {
-            run(argument).str { argument ->
+            run(argument).str { id ->
                 run(action).thenAccept { value ->
                     containerOrSender(selector).thenAccept { container ->
                         container.forEachEntity {
                             val dataContainer = this.getDataContainer() ?: return@forEachEntity
-                            val data = dataContainer[id.toString()] ?: Data(0)
+                            val data = dataContainer[id] ?: Data(0)
                             data.increaseAny(value ?: 0)
-                            dataContainer.update(id.toString(), data)
+                            dataContainer.update(id, data)
                         }
                     }
                 }
