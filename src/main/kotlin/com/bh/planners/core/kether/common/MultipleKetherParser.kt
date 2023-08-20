@@ -1,12 +1,10 @@
 package com.bh.planners.core.kether.common
 
 import com.bh.planners.core.kether.common.KetherHelper.simpleKetherParser
-import taboolib.common.platform.function.info
 import taboolib.library.kether.QuestActionParser
 import taboolib.library.reflex.ReflexClass
 import taboolib.module.kether.ScriptActionParser
 import taboolib.module.kether.expects
-import taboolib.module.kether.scriptParser
 
 abstract class MultipleKetherParser(vararg id: String) : SimpleKetherParser(*id), Stateable {
 
