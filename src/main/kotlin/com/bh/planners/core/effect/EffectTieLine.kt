@@ -10,7 +10,7 @@ import com.bh.planners.core.kether.getContext
 import com.bh.planners.core.kether.nextOptionalAction
 import com.bh.planners.core.kether.origin
 import com.bh.planners.core.pojo.Context
-import taboolib.common.platform.function.submit
+import com.bh.planners.util.safeAsync
 import taboolib.library.kether.ParsedAction
 import taboolib.library.kether.QuestReader
 import taboolib.module.kether.ScriptAction
@@ -78,7 +78,7 @@ object EffectTieLine : Effect(), EffectParser {
 
                         val response = ActionEffect.Response(context, events)
                         val spawner = Spawner(pos1.firstLocationTarget()!!, pos2.firstLocationTarget()!!)
-                        submit(async = true) {
+                        safeAsync {
                             spawner.sendTo(frame.origin(), EffectOption.get(action), context, response)
                         }
                     }

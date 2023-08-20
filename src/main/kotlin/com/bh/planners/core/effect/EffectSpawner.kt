@@ -44,22 +44,22 @@ open class EffectSpawner(val option: EffectOption) {
             data: ProxyParticle.Data?,
         ) {
 
+            val bukkitParticle = try {
+                Particle.valueOf(particle.name)
+            } catch (ignored: IllegalArgumentException) {
+                error("Unsupported particle ${particle.name}")
+            }
+
             // 1.12.2
-            if (particle == ProxyParticle.REDSTONE && MinecraftVersion.majorLegacy == 11202 && data != null && data is ProxyParticle.DustData) {
+            if (MinecraftVersion.majorLegacy == 11202 && data != null && data is ProxyParticle.DustData) {
                 val color = data.color
                 val r = (color.red / 255.0f).toDouble()
                 val g = (color.green / 255.0f).toDouble()
                 val b = (color.blue / 255.0f).toDouble()
                 (0 until count).forEach { _ ->
-                    spawnParticle(Particle.REDSTONE, location.x, location.y, location.z, 0, r, g, b)
+                    spawnParticle(bukkitParticle, location.x, location.y, location.z, 0, r, g, b)
                 }
                 return
-            }
-
-            val bukkitParticle = try {
-                Particle.valueOf(particle.name)
-            } catch (ignored: IllegalArgumentException) {
-                error("Unsupported particle ${particle.name}")
             }
 
             spawnParticle(
