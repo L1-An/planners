@@ -9,10 +9,7 @@ import com.bh.planners.core.kether.common.ParameterKetherParser
 import com.bh.planners.core.module.mana.ManaManager
 import com.bh.planners.core.pojo.data.Data
 import org.bukkit.attribute.Attribute
-import taboolib.module.kether.actionNow
-import taboolib.module.kether.long
-import taboolib.module.kether.run
-import taboolib.module.kether.str
+import taboolib.module.kether.*
 
 @CombinationKetherParser.Used
 object ActionProfile : MultipleKetherParser("profile"){
@@ -49,10 +46,10 @@ object ActionProfile : MultipleKetherParser("profile"){
 
         val get = argumentKetherParser { argument ->
             val default = this.nextOptionalAction(arrayOf("default"),"null")!!
-            actionNow {
+            actionFuture {
                 run(argument).str { argument ->
                     run(default).thenApply { default ->
-                        bukkitPlayer()?.getDataContainer()?.get(argument) ?: default
+                        it.complete(bukkitPlayer()?.getDataContainer()?.get(argument) ?: default)
                     }
                 }
             }
@@ -61,9 +58,9 @@ object ActionProfile : MultipleKetherParser("profile"){
         val main = get
 
             val has = argumentKetherParser { argument ->
-            actionNow {
+            actionFuture {
                 run(argument).str { argument ->
-                    bukkitPlayer()?.getDataContainer()?.containsKey(argument)
+                    it.complete(bukkitPlayer()?.getDataContainer()?.containsKey(argument))
                 }
             }
         }

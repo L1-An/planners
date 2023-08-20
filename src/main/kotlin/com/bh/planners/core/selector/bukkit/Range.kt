@@ -29,8 +29,9 @@ object Range : Selector {
 
         return createAwaitVoidFuture {
             if (x == y && y == z) {
-                location.world?.livingEntities?.forEach {
-                    val r = x + (sqrt(it.width.pow(2.0) * 2) / 2)
+                val entities = location.world?.livingEntities ?: return@createAwaitVoidFuture
+                entities.forEach {
+                    val r = x + sqrt(it.width.pow(2.0) * 2)
                     if (it.location.isInSphere(location, r)) {
                         data.container += it.toTarget()
                     }

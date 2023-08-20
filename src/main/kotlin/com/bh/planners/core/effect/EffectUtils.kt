@@ -7,6 +7,7 @@ import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
 import taboolib.common.platform.function.isPrimaryThread
 import taboolib.common.platform.function.submit
+import taboolib.common.util.sync
 import taboolib.common5.Coerce
 import taboolib.module.effect.math.Matrix
 import java.util.concurrent.CompletableFuture
@@ -125,9 +126,7 @@ fun createAwaitVoidFuture(block: () -> Unit): CompletableFuture<Void> {
         block()
         CompletableFuture.completedFuture(null)
     } else {
-        createAwaitFuture {
-            block()
-        }
+        sync { block() }
         CompletableFuture.completedFuture(null)
     }
 }
