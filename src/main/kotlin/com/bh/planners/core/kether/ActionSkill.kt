@@ -19,7 +19,7 @@ import org.bukkit.entity.Player
 object ActionSkill : MultipleKetherParser("skill") {
 
     val cooldown = KetherHelper.simpleKetherParser<Unit> {
-        it.group(text(), long(), command("of","at", then = text()).option(),containerOrSender()).apply(it) { operator,tick, skill, container ->
+        it.group(text(), long(), command("of","at", then = text()).option().defaultsTo(null),containerOrSender()).apply(it) { operator,tick, skill, container ->
             now {
                 val operator1 = Operator.valueOf(operator.uppercase())
                 val instance = if (skill != null) {

@@ -12,7 +12,7 @@ import org.bukkit.attribute.Attribute
 import taboolib.module.kether.*
 
 @CombinationKetherParser.Used
-object ActionProfile : MultipleKetherParser("profile"){
+object ActionProfile : MultipleKetherParser("profile") {
 
     val data = object : ParameterKetherParser("flag") {
 
@@ -32,7 +32,7 @@ object ActionProfile : MultipleKetherParser("profile"){
 
         val to = argumentKetherParser("set") { argument ->
             val action = this.nextParsedAction()
-            val timeout = this.nextOptionalAction(arrayOf("timeout","time"),0L)!!
+            val timeout = this.nextOptionalAction(arrayOf("timeout", "time"), 0L)!!
             actionNow {
                 run(argument).str { argument ->
                     run(action).thenApply { value ->
@@ -45,7 +45,7 @@ object ActionProfile : MultipleKetherParser("profile"){
         }
 
         val get = argumentKetherParser { argument ->
-            val default = this.nextOptionalAction(arrayOf("default"),"null")!!
+            val default = this.nextOptionalAction(arrayOf("default","def"), "null")!!
             actionFuture {
                 run(argument).str { argument ->
                     run(default).thenApply { default ->
@@ -57,7 +57,7 @@ object ActionProfile : MultipleKetherParser("profile"){
 
         val main = get
 
-            val has = argumentKetherParser { argument ->
+        val has = argumentKetherParser { argument ->
             actionFuture {
                 run(argument).str { argument ->
                     it.complete(bukkitPlayer()?.getDataContainer()?.containsKey(argument))
@@ -119,7 +119,7 @@ object ActionProfile : MultipleKetherParser("profile"){
      * profile max-mana
      * profile mana-max
      */
-    val maxmana = simpleKetherNow("max-mana","mana-max") {
+    val maxmana = simpleKetherNow("max-mana", "mana-max") {
         ManaManager.INSTANCE.getMaxMana(senderPlannerProfile()!!)
     }
 
@@ -128,7 +128,7 @@ object ActionProfile : MultipleKetherParser("profile"){
      * profile regain-mana
      * profile mana-regain
      */
-    val regainmana = simpleKetherNow("regain-mana","mana-regain") {
+    val regainmana = simpleKetherNow("regain-mana", "mana-regain") {
         ManaManager.INSTANCE.getRegainMana(senderPlannerProfile()!!)
     }
 
@@ -153,7 +153,7 @@ object ActionProfile : MultipleKetherParser("profile"){
     }
 
     // profile maxexp
-    val maxexp = simpleKetherNow("max-exp","exp-max") {
+    val maxexp = simpleKetherNow("max-exp", "exp-max") {
         senderPlannerProfile()!!.maxExperience
     }
 

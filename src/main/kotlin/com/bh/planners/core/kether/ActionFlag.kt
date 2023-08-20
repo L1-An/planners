@@ -14,12 +14,12 @@ object ActionFlag : ParameterKetherParser("flag", "data") {
     val main = argumentKetherParser("get") { argument ->
         val default = nextOptionalAction(arrayOf("default", "def"), "null")!!
         val selector = nextSelectorOrNull()
-        actionFuture {
+        actionFuture { f ->
             run(argument).str { id ->
                 run(default).thenApply { default ->
                     containerOrSender(selector).thenApply { container ->
                         val entity = container.firstEntityTarget() ?: bukkitPlayer()!!
-                        it.complete(entity.getDataContainer()[id]?.data ?: default)
+                        f.complete(entity.getDataContainer().get(id)?.data ?: default)
                     }
                 }
             }

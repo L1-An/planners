@@ -1,10 +1,17 @@
+import java.util.concurrent.CompletableFuture
+
 object TestMain {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        SelectorTransfer(":@ttt ab 1 4 5 @ass 45ds sa").run().thenAccept {
-            println("===")
+        val future = CompletableFuture<String>()
+        future.thenCompose {
+            CompletableFuture.completedFuture("$it aaa")
+        }.thenAccept {
+            println(it)
         }
+        future.complete("Abc")
+
     }
 
 }

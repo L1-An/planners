@@ -8,6 +8,11 @@ import taboolib.common.OpenResult
 import taboolib.module.kether.*
 
 
+/**
+ * selector
+ *
+ *
+ */
 @CombinationKetherParser.Used
 object ActionSelector : ParameterKetherParser("selector") {
 
@@ -34,7 +39,6 @@ object ActionSelector : ParameterKetherParser("selector") {
         }
     }
 
-    //默认
     val other = list
 
     // selector <id> remove
