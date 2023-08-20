@@ -19,7 +19,8 @@ object ActionDragonLoader {
      * dragon sound name <key: random.uuid> <type: music> <volume: 1.0> <pitch: 1.0> <loop: false> [selector]
      * t: dragon sound xxx key 王八 type music volume 1.0 pitch 1.0 loop true [selector]
      *
-     * dragon effect [scheme: action] <rotation: action(0,0,0)> <time: action(100)> <they selector>
+     * snowstorm
+     * dragon effect [scheme: action] <rotation: action(0,0,0)> <translate: action(0,0,0)> <time: action(100)> <they selector>
      *
      * 实体绑定
      * dragon bind <entity: UUID> <bindEntity: UUID> <forward: Float> <offsetY: Float> <sideways: Float> <bindYaw: true> <bindPitch: true> <they selector>
@@ -91,6 +92,7 @@ object ActionDragonLoader {
                 ActionDragonEffect(
                     it.nextParsedAction(),
                     it.nextOptionalAction(arrayOf("rotation"), "0,0,0")!!,
+                    it.nextOptionalAction(arrayOf("translate"), "0,0,0")!!,
                     it.nextOptionalAction(arrayOf("time"), 100)!!,
                     it.nextSelectorOrNull()
                 )
