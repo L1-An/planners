@@ -63,7 +63,6 @@ class DefaultManaManager : ManaManager {
 
     override fun getMaxMana(profile: PlayerProfile): Double {
         val max = profile.getFlag("@max-mana")?.toDouble() ?: calculate(profile)
-        dragonSend(profile.player, maxMana = max)
         return max
     }
 
@@ -71,6 +70,7 @@ class DefaultManaManager : ManaManager {
     override fun getMana(profile: PlayerProfile): Double {
         val max = getMaxMana(profile)
         val mana = profile.getFlag("@mana")?.toDouble() ?: 0.0
+        dragonSend(profile.player, mana, max)
         return if (mana > max) {
             setMana(profile, max)
             profile.getFlag("@mana")?.toDouble() ?: 0.0
@@ -89,7 +89,6 @@ class DefaultManaManager : ManaManager {
 
     override fun setMana(profile: PlayerProfile, value: Double) {
         val mana = value.coerceAtMost(getMaxMana(profile)).coerceAtLeast(0.0)
-        dragonSend(profile.player, mana)
         profile.updateFlag("@mana", mana)
     }
 
@@ -124,7 +123,7 @@ class DefaultManaManager : ManaManager {
         ?: PlannersOption.regainManaExperience
     }
 
-    fun dragonSend(player: Player, mana: Double? = null, maxMana: Double? = null) {
+    private fun dragonSend(player: Player, mana: Double? = null, maxMana: Double? = null) {
         safeAsync {
             if (Bukkit.getPluginManager().isPluginEnabled("DragonCore")) {
                 mana?.let { PacketSender.sendSyncPlaceholder(player, mapOf("planners_mana" to it.toString())) }
