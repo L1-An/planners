@@ -107,8 +107,8 @@ class ActionDamage {
             Damage(
                 it.nextParsedAction(),
                 it.nextSelector(),
-                it.nextOptionalAction(arrayOf("source")),
-                it.nextOptionalAction(arrayOf("type"), "MAGIC")!!
+                it.nextOptionalParsedAction(arrayOf("source")),
+                it.nextOptionalParsedAction(arrayOf("type"), "MAGIC")!!
             )
         }
 
@@ -122,7 +122,7 @@ class ActionDamage {
             val action = it.nextParsedAction()
             Attack(
                 action,
-                it.nextOptionalAction(arrayOf("option", "data", "opt"), "EMPTY")!!,
+                it.nextOptionalParsedAction(arrayOf("option", "data", "opt"), "EMPTY")!!,
                 it.nextSelector()
             )
         }

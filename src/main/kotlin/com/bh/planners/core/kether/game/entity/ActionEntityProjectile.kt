@@ -139,14 +139,14 @@ class ActionEntityProjectile {
             ActionProjectile(
                 it.nextParsedAction(),
                 it.nextParsedAction(),
-                it.nextOptionalAction(arrayOf("step"), 0.4)!!,
-                it.nextOptionalAction(arrayOf("gravity"), "false")!!,
-                it.nextOptionalAction(arrayOf("bounce"), "false")!!,
-                it.nextOptionalAction(arrayOf("rotateX"), 0.0)!!,
-                it.nextOptionalAction(arrayOf("rotateY"), 0.0)!!,
-                it.nextOptionalAction(arrayOf("rotateZ"), 0.0)!!,
-                it.nextOptionalAction(arrayOf("timeout"), 20)!!,
-                it.nextOptionalAction(arrayOf("oncapture", "onhit"), "none")!!,
+                it.nextOptionalParsedAction(arrayOf("step"), 0.4)!!,
+                it.nextOptionalParsedAction(arrayOf("gravity"), "false")!!,
+                it.nextOptionalParsedAction(arrayOf("bounce"), "false")!!,
+                it.nextOptionalParsedAction(arrayOf("rotateX"), 0.0)!!,
+                it.nextOptionalParsedAction(arrayOf("rotateY"), 0.0)!!,
+                it.nextOptionalParsedAction(arrayOf("rotateZ"), 0.0)!!,
+                it.nextOptionalParsedAction(arrayOf("timeout"), 20)!!,
+                it.nextOptionalParsedAction(arrayOf("oncapture", "onhit"), "none")!!,
                 it.nextSelectorOrNull()
             )
         }

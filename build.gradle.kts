@@ -53,7 +53,9 @@ taboolib {
 repositories {
     mavenCentral()
 }
-
+tasks.withType<Jar> {
+    destinationDir = file("F:/Server/paper 1.19.4/plugins")
+}
 dependencies {
 
     compileOnly("ink.ptms.core:v11900:11900:mapped")

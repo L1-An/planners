@@ -12,7 +12,7 @@ import taboolib.module.kether.*
 object ActionFlag : ParameterKetherParser("flag", "data") {
 
     val main = argumentKetherParser("get") { argument ->
-        val default = nextOptionalAction(arrayOf("default", "def"), "null")!!
+        val default = nextOptionalParsedAction(arrayOf("default", "def"), "null")!!
         val selector = nextSelectorOrNull()
         actionFuture { f ->
             run(argument).str { id ->
@@ -28,7 +28,7 @@ object ActionFlag : ParameterKetherParser("flag", "data") {
 
     val to = argumentKetherParser("set") { argument ->
         val action = nextParsedAction()
-        val timeout = nextOptionalAction(arrayOf("timeout","time"),-1L)!!
+        val timeout = nextOptionalParsedAction(arrayOf("timeout","time"),-1L)!!
         val selector = nextSelectorOrNull()
         actionNow {
             run(argument).str { id ->

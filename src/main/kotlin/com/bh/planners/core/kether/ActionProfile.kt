@@ -32,7 +32,7 @@ object ActionProfile : MultipleKetherParser("profile") {
 
         val to = argumentKetherParser("set") { argument ->
             val action = this.nextParsedAction()
-            val timeout = this.nextOptionalAction(arrayOf("timeout", "time"), 0L)!!
+            val timeout = this.nextOptionalParsedAction(arrayOf("timeout", "time"), 0L)!!
             actionNow {
                 run(argument).str { argument ->
                     run(action).thenApply { value ->
@@ -45,7 +45,7 @@ object ActionProfile : MultipleKetherParser("profile") {
         }
 
         val get = argumentKetherParser { argument ->
-            val default = this.nextOptionalAction(arrayOf("default","def"), "null")!!
+            val default = this.nextOptionalParsedAction(arrayOf("default","def"), "null")!!
             actionFuture {
                 run(argument).str { argument ->
                     run(default).thenApply { default ->

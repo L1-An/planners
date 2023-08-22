@@ -76,7 +76,7 @@ object ActionAdyeshach : MultipleKetherParser("ady", "adyeshach") {
 //                ActionAdyeshachFollow(
 //                    it.nextParsedAction(),
 //                    it.nextParsedAction(),
-//                    it.nextOptionalAction(arrayOf("option", "params"), "EMPTY")!!
+//                    it.nextOptionalParsedAction(arrayOf("option", "params"), "EMPTY")!!
 //                )
 //            }
 //            case("script") {
