@@ -8,6 +8,8 @@ import com.bh.planners.core.effect.Target.Companion.target
 import com.bh.planners.core.pojo.Context
 import com.bh.planners.core.pojo.player.PlayerProfile
 import com.bh.planners.util.runKetherThrow
+import com.bh.planners.util.safeAsync
+import eos.moe.dragoncore.network.PacketSender
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import taboolib.common.platform.function.submitAsync
@@ -32,7 +34,9 @@ class DefaultManaManager : ManaManager {
         regainTask = submitAsync(period = PlannersOption.regainManaPeriod, comment = "Mana Regain") {
             Bukkit.getOnlinePlayers().forEach { player ->
                 val profile = player.plannersProfile
-                if (ManaManager.INSTANCE.getMaxMana(profile) == ManaManager.INSTANCE.getMana(profile)) return@forEach
+                val max = ManaManager.INSTANCE.getMaxMana(profile)
+                val mana = ManaManager.INSTANCE.getMana(profile)
+                if (max == mana) return@forEach
                 nextRegainMana(player)
             }
         }
@@ -58,13 +62,15 @@ class DefaultManaManager : ManaManager {
     }
 
     override fun getMaxMana(profile: PlayerProfile): Double {
-        return profile.getFlag("@max-mana")?.toDouble() ?: calculate(profile)
+        val max = profile.getFlag("@max-mana")?.toDouble() ?: calculate(profile)
+        return max
     }
 
 
     override fun getMana(profile: PlayerProfile): Double {
         val max = getMaxMana(profile)
         val mana = profile.getFlag("@mana")?.toDouble() ?: 0.0
+        dragonSend(profile.player, mana, max)
         return if (mana > max) {
             setMana(profile, max)
             profile.getFlag("@mana")?.toDouble() ?: 0.0
@@ -82,7 +88,8 @@ class DefaultManaManager : ManaManager {
     }
 
     override fun setMana(profile: PlayerProfile, value: Double) {
-        profile.updateFlag("@mana", value.coerceAtMost(getMaxMana(profile)).coerceAtLeast(0.0))
+        val mana = value.coerceAtMost(getMaxMana(profile)).coerceAtLeast(0.0)
+        profile.updateFlag("@mana", mana)
     }
 
     override fun getRegainMana(profile: PlayerProfile): Double {
@@ -114,6 +121,15 @@ class DefaultManaManager : ManaManager {
         val instance = profile.job!!.instance
         return instance.option.regainManaExperience ?: instance.router.regainManaExperience
         ?: PlannersOption.regainManaExperience
+    }
+
+    private fun dragonSend(player: Player, mana: Double? = null, maxMana: Double? = null) {
+        safeAsync {
+            if (Bukkit.getPluginManager().isPluginEnabled("DragonCore")) {
+                mana?.let { PacketSender.sendSyncPlaceholder(player, mapOf("planners_mana" to it.toString())) }
+                maxMana?.let { PacketSender.sendSyncPlaceholder(player, mapOf("planners_maxMana" to it.toString())) }
+            }
+        }
     }
 
 }
