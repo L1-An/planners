@@ -54,7 +54,7 @@ repositories {
     mavenCentral()
 }
 tasks.withType<Jar> {
-    destinationDir = file("F:/Server/paper 1.19.4/plugins")
+//    destinationDir = file("F:/Server/paper 1.19.4/plugins")
 }
 dependencies {
 

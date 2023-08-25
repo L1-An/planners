@@ -34,7 +34,7 @@ object Sector : Selector {
         return createAwaitVoidFuture {
             val entities = location.world?.livingEntities ?: return@createAwaitVoidFuture
             entities.forEach { entity ->
-                if (isPointInEntitySector(entity.eyeLocation, location, radius + sqrt( entity.width.pow( 2.0 ) * 2 ), angle)) {
+                if (isPointInEntitySector(entity.eyeLocation, location, radius, angle)) {
                     if (data.isNon) {
                         data.container.removeIf { t -> t == entity }
                     }
