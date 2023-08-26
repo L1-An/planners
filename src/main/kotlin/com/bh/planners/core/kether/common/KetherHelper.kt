@@ -1,10 +1,7 @@
 package com.bh.planners.core.kether.common
 
 import com.bh.planners.core.effect.Target
-import com.bh.planners.core.kether.container
-import com.bh.planners.core.kether.getContext
-import com.bh.planners.core.kether.nextSelectorOrNull
-import com.bh.planners.core.kether.origin
+import com.bh.planners.core.kether.*
 import com.mojang.datafixers.kinds.App
 import org.bukkit.Material
 import taboolib.library.kether.ParsedAction
@@ -63,12 +60,53 @@ object KetherHelper {
         return containerOrElse { Target.Container() }
     }
 
+    /**
+     * 不会读取前缀的转换器
+     */
+    fun ParserHolder.actionContainer(): Parser<Target.Container> {
+        return Parser.frame { reader ->
+            val action = reader.nextParsedAction()
+            future { this.container(action) }
+        }
+    }
+
+    /**
+     * 不会读取前缀的转换器
+     */
+    fun ParserHolder.actionContainerOrSender(): Parser<Target.Container> {
+        return Parser.frame { reader ->
+            val action = reader.nextParsedAction()
+            future { this.containerOrSender(action) }
+        }
+    }
+
+    /**
+     * 不会读取前缀的转换器
+     */
+    fun ParserHolder.actionContainerOrOrigin(): Parser<Target.Container> {
+        return Parser.frame { reader ->
+            val action = reader.nextParsedAction()
+            future { this.containerOrOrigin(action) }
+        }
+    }
+
+    /**
+     * 不会读取前缀的转换器
+     */
+    fun ParserHolder.actionContainerOrEmpty(): Parser<Target.Container> {
+        return Parser.frame { reader ->
+            val action = reader.nextParsedAction()
+            future { this.containerOrEmpty(action) }
+        }
+    }
 
     fun ParserHolder.materialOrStone() = material(Material.STONE)
 
     fun ParserHolder.materialOrBarrier() = material(Material.BARRIER)
 
-    fun ParserHolder.material(default: Material) = any().map { Material.valueOf(it?.toString() ?: return@map null) }.defaultsTo(default)
+    fun ParserHolder.material(default: Material) = any().map {
+        Material.valueOf(it?.toString() ?: return@map null)
+    }.defaultsTo(default)
 
     fun simpleKetherParser(vararg id: String, func: () -> ScriptActionParser<out Any?>): SimpleKetherParser {
         return object : SimpleKetherParser(*id) {

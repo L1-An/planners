@@ -36,5 +36,7 @@ interface ProxyEntity {
     val entityId: Int
 
     fun teleport(location: Location)
+    
+    fun delete()
 
 }

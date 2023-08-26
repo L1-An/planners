@@ -1,7 +1,12 @@
 package com.bh.planners.core.kether.game
 
 import com.bh.planners.core.kether.NAMESPACE
+import com.bh.planners.core.kether.common.CombinationKetherParser
+import com.bh.planners.core.kether.common.KetherHelper
+import com.bh.planners.core.kether.common.KetherHelper.actionContainer
+import com.bh.planners.core.kether.common.KetherHelper.actionContainerOrOrigin
 import com.bh.planners.core.kether.createContainer
+import com.bh.planners.core.kether.game.ActionVelocity.generatedVelocity
 import com.bh.planners.core.kether.nextSelector
 import com.bh.planners.core.kether.origin
 import org.bukkit.Location
@@ -10,51 +15,17 @@ import taboolib.library.kether.ParsedAction
 import taboolib.module.kether.*
 import java.util.concurrent.CompletableFuture
 
-class ActionDrag(
-    val step: ParsedAction<*>,
-    val selector: ParsedAction<*>,
-    val pos: ParsedAction<*>?,
-) : ScriptAction<Void>() {
-
-
-    private fun next(locA: Location, locB: Location, step: Double): Vector {
-        val vectorAB = locB.clone().subtract(locA).toVector()
-        vectorAB.normalize()
-        vectorAB.multiply(step)
-        return vectorAB
-    }
-
-    companion object {
-
-        /**
-         * drag step selector1 selector2(1)
-         */
-        @KetherParser(["drag"], namespace = NAMESPACE, shared = true)
-        fun parser() = scriptParser {
-            ActionDrag(it.nextParsedAction(), it.nextParsedAction(), it.nextSelector())
-        }
-
-    }
-
-    override fun run(frame: ScriptFrame): CompletableFuture<Void> {
-        frame.run(step).double { step ->
-            frame.createContainer(selector).thenAccept { container ->
-                if (pos != null) {
-                    frame.createContainer(pos).thenAccept {
-                        val pos = it.firstBukkitLocation() ?: error("ActionDrag 'pos' empty")
-                        container.forEachProxyEntity {
-                            this.velocity = next(this.location, pos, step)
-                        }
-                    }
-                } else {
-                    container.forEachProxyEntity {
-                        this.velocity = next(this.location, frame.origin().value, step)
-                    }
-                }
+@CombinationKetherParser.Used
+fun drag() = KetherHelper.simpleKetherParser<Unit>{
+    it.group(double(),actionContainer(), command("pos", then = actionContainerOrOrigin()).option()).apply(it) { step, container, target ->
+        now {
+            val location = target?.firstBukkitLocation() ?: origin().value
+            container.forEachProxyEntity {
+                val vectorAB = this.location.clone().subtract(location).toVector()
+                vectorAB.normalize()
+                vectorAB.multiply(step)
+                this.velocity = vectorAB
             }
         }
-        return CompletableFuture.completedFuture(null)
     }
-
-
 }

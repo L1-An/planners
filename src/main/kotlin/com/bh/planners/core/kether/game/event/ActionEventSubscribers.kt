@@ -19,10 +19,10 @@ class ActionEventSubscribers {
             it.switch {
                 case("keypress") {
                     ActionKeyPress(
-                        it.nextParsedAction(),
-                        it.nextOptionalParsedAction(arrayOf("timeout"), Emitter.timeout / 50)!!,
-                        it.nextSelectorOrNull(),
-                        it.get(arrayOf("then"))
+                            it.nextParsedAction(),
+                            it.nextOptionalParsedAction(arrayOf("timeout"), Emitter.timeout / 50)!!,
+                            it.nextSelectorOrNull(),
+                            it.get(arrayOf("then"))
                     )
                 }
             }

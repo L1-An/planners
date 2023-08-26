@@ -43,6 +43,8 @@ open class SimpleTimeoutTask(val tick: Long, open val closed: () -> Unit = EMPTY
         }
 
         fun createSimpleTask(tick: Long, async: Boolean = !Bukkit.isPrimaryThread(), closed: () -> Unit) {
+            // 无效任务
+            if (tick == -1L) return
             register(SimpleTimeoutTask(tick, closed), async)
         }
 

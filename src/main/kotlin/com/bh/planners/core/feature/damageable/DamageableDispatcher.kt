@@ -3,7 +3,7 @@ package com.bh.planners.core.feature.damageable
 import com.bh.planners.api.common.Demand
 import com.bh.planners.api.event.PluginReloadEvent
 import com.bh.planners.api.event.entity.EntityDamageableEvent
-import com.bh.planners.core.kether.game.ActionDamage
+import com.bh.planners.core.kether.game.doDamage
 import com.bh.planners.core.pojo.data.DataContainer.Companion.unsafeData
 import com.bh.planners.util.files
 import com.bh.planners.util.timing
@@ -85,7 +85,7 @@ object DamageableDispatcher {
                 }
                 context.attacker.removeMeta("@PlannersDamageable")
 
-                ActionDamage.doDamage(context.attacker, context.victim, minecraftDamageEvent.finalDamage)
+                doDamage(context.attacker, context.victim, minecraftDamageEvent.finalDamage)
             }
         }.exceptionally {
             it.printStackTrace()

@@ -1,5 +1,6 @@
 package com.bh.planners.core.kether.compat.dragoncore
 
+import com.bh.planners.core.kether.common.KetherHelper
 import com.bh.planners.core.kether.createContainer
 import com.bh.planners.core.kether.readAccept
 import eos.moe.dragoncore.network.PacketSender
@@ -9,6 +10,14 @@ import taboolib.module.kether.ScriptAction
 import taboolib.module.kether.ScriptFrame
 import java.util.*
 import java.util.concurrent.CompletableFuture
+
+//fun actionDragonBind() = KetherHelper.simpleKetherParser<Unit>{
+//    it.group(
+//        command("entity", then = any()),
+//        command("bind-entity","bindentity","bindEntity", then = any()),
+//        command("forward",)
+//    )
+//}
 
 class ActionDragonBind(
     val entity: ParsedAction<*>,
