@@ -9,7 +9,7 @@ import com.bh.planners.core.kether.common.MultipleKetherParser
 import com.bh.planners.core.kether.parseTargetContainer
 import com.bh.planners.core.pojo.Context
 import me.skymc.customized.monsteritem.api.MonsterItemAPI
-import me.skymc.customized.monsteritem.attribute.type.WeaponType
+import me.skymc.customized.monsteritem.bukkit.core.attribute.type.WeaponType
 import org.bukkit.entity.Player
 import taboolib.module.kether.deepVars
 import taboolib.module.kether.script
@@ -21,16 +21,13 @@ object ActionMonster : MultipleKetherParser("monster") {
     val attack = KetherHelper.simpleKetherParser<Unit> {
         it.group(command("type", then = text()).option(), double(), containerOrEmpty()).apply(it) { type, damage, container ->
             now {
-                // 普通的伤害
-                if (type == null) {
-                    
-                }
-                // 锁定type的伤害
-                else {
-                    val weaponType = WeaponType.valueOf(type.uppercase())
-                    val source = script().sender!!.castSafely<Player>() ?: error("sender must be a player")
-                    container.forEachLivingEntity {
-                        MonsterItemAPI.makeSkillDamage(source, this, damage, weaponType)
+                val weaponType = if (type != null) WeaponType.valueOf(type.uppercase()) else null
+                val source = script().sender!!.castSafely<Player>() ?: error("sender must be a player")
+                container.forEachLivingEntity {
+                    if (weaponType == null) {
+                        MonsterItemAPI.getInstance().makeSkillDamage(source,this,damage)
+                    } else {
+                        MonsterItemAPI.getInstance().makeSkillDamage(source, this, damage, weaponType)
                     }
                 }
 
