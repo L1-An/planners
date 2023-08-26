@@ -19,13 +19,21 @@ import taboolib.module.kether.script
 object ActionMonster : MultipleKetherParser("monster") {
 
     val attack = KetherHelper.simpleKetherParser<Unit> {
-        it.group(text(), double(), containerOrEmpty()).apply(it) { type, damage, container ->
+        it.group(command("type", then = text()).option(), double(), containerOrEmpty()).apply(it) { type, damage, container ->
             now {
-                val weaponType = WeaponType.valueOf(type.uppercase())
-                val source = script().sender!!.castSafely<Player>() ?: error("sender must be a player")
-                container.forEachLivingEntity {
-                    MonsterItemAPI.makeSkillDamage(source, this, damage, weaponType)
+                // 普通的伤害
+                if (type == null) {
+                    
                 }
+                // 锁定type的伤害
+                else {
+                    val weaponType = WeaponType.valueOf(type.uppercase())
+                    val source = script().sender!!.castSafely<Player>() ?: error("sender must be a player")
+                    container.forEachLivingEntity {
+                        MonsterItemAPI.makeSkillDamage(source, this, damage, weaponType)
+                    }
+                }
+
             }
         }
     }
