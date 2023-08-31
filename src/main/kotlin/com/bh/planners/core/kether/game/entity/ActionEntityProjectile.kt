@@ -3,34 +3,29 @@ package com.bh.planners.core.kether.game.entity
 import com.bh.planners.api.common.SimpleTimeoutTask
 import com.bh.planners.core.effect.Target
 import com.bh.planners.core.effect.Target.Companion.target
-import com.bh.planners.core.effect.Target.Companion.toTarget
 import com.bh.planners.core.effect.inline.Incident.Companion.handleIncident
 import com.bh.planners.core.effect.inline.IncidentHitBlock
 import com.bh.planners.core.effect.inline.IncidentHitEntity
 import com.bh.planners.core.effect.rotateAroundX
 import com.bh.planners.core.effect.rotateAroundY
 import com.bh.planners.core.effect.rotateAroundZ
-import com.bh.planners.core.kether.*
+import com.bh.planners.core.kether.common.CombinationKetherParser
 import com.bh.planners.core.kether.common.KetherHelper
 import com.bh.planners.core.kether.common.KetherHelper.containerOrSender
 import com.bh.planners.core.kether.game.ActionVelocity.generatedVelocity
-import com.bh.planners.core.pojo.Context
+import com.bh.planners.core.kether.getContext
 import com.bh.planners.core.pojo.Session
 import org.bukkit.entity.*
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.info
-import taboolib.common.platform.function.submit
-import taboolib.library.kether.ParsedAction
-import taboolib.library.kether.QuestContext
-import taboolib.module.kether.*
-import taboolib.platform.util.*
-import java.util.*
-import java.util.concurrent.CompletableFuture
+import taboolib.platform.util.getMetaFirst
+import taboolib.platform.util.getMetaFirstOrNull
+import taboolib.platform.util.hasMeta
+import taboolib.platform.util.setMeta
 
-
+@CombinationKetherParser.Used
 fun projectile() = KetherHelper.simpleKetherParser<Target.Container> {
     it.group(
             text(),
