@@ -26,17 +26,17 @@ abstract class ParameterKetherParser(vararg id: String) : SimpleKetherParser(*id
     }
 
     override fun onInit() {
-        ReflexClass.of(this::class.java).structure.fields.forEach { field ->
+        ReflexClass.of(this::class.java).structure.fields.forEach {
 
             // ignored ...
-            if (field.name == "INSTANCE" || field.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {
+            if (it.name == "INSTANCE" || it.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {
                 return@forEach
             }
 
             // parameter parser
-            if (ArgumentKetherParser::class.java.isAssignableFrom(field.fieldType)) {
-                val parser = field.get(this) as ArgumentKetherParser
-                setOf(field.name,*parser.id).forEach {
+            if (ArgumentKetherParser::class.java.isAssignableFrom(it.fieldType)) {
+                val parser = it.get(this) as ArgumentKetherParser
+                setOf(it.name,*parser.id).forEach {
                     this.method[it] = parser
                 }
             }

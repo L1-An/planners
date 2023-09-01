@@ -15,6 +15,7 @@ open class Condition(val option: ConfigurationSection) : ICondition {
     } else listOf(option.getInt("$"))
 
     val consume = option.getString("consume")
+
     override val placeholder = option.getString("placeholder")
 
 }

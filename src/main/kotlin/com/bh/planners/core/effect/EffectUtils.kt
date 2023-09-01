@@ -23,13 +23,13 @@ val EffectOption.startAngle: Double
     get() = Coerce.toDouble(this.demand.get("start", "0.0"))
 
 val EffectOption.angle: Double
-    get() = Coerce.toDouble(this.demand.get(Effects.ANGLE, "1.0"))
+    get() = Coerce.toDouble(this.demand.get(listOf("angle", "a"), "1.0"))
 
 val EffectOption.radius: Double
-    get() = Coerce.toDouble(this.demand.get(Effects.RADIUS, "1.0"))
+    get() = Coerce.toDouble(this.demand.get(listOf("radius", "r"), "1.0"))
 
 val EffectOption.step: Double
-    get() = Coerce.toDouble(this.demand.get(Effects.STEP, "1.0"))
+    get() = Coerce.toDouble(this.demand.get(listOf("step", "s"), "1.0"))
 
 val EffectOption.spread: Double
     get() = Coerce.toDouble(this.demand.get("spread", "0.0"))

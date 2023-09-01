@@ -31,7 +31,7 @@ interface AttributeBridge {
                     ?: "-1") == "3"
             },
             Inspect(arrayOf("OriginAttribute"), OriginAttributeBridge::class.java) { isEnable },
-            Inspect(arrayOf("AttributeSystem"), AttributeSystemBridge::class.java) { isEnable },
+//            Inspect(arrayOf("AttributeSystem"), AttributeSystemBridge::class.java) { isEnable },
             Inspect(arrayOf("MonsterItem"), MonsterItemBridge::class.java) { isEnable },
         )
 

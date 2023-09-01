@@ -32,23 +32,23 @@ abstract class MultipleKetherParser(vararg id: String) : SimpleKetherParser(*id)
 
     @Suppress("UNCHECKED_CAST")
     override fun onInit() {
-        ReflexClass.of(this::class.java).structure.fields.forEach { field ->
+        ReflexClass.of(this::class.java).structure.fields.forEach {
 
             // ignored ...
-            if (field.name == "INSTANCE" || field.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {
+            if (it.name == "INSTANCE" || it.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {
                 return@forEach
             }
             // combination parser
-            else if (CombinationKetherParser::class.java.isAssignableFrom(field.fieldType)) {
-                val parser = field.get(this) as CombinationKetherParser
-                registerInternalCombinationParser(arrayOf(field.name),parser)
+            else if (CombinationKetherParser::class.java.isAssignableFrom(it.fieldType)) {
+                val parser = it.get(this) as CombinationKetherParser
+                registerInternalCombinationParser(arrayOf(it.name),parser)
             }
             // scriptParser combinationParser
-            else if (ScriptActionParser::class.java.isAssignableFrom(field.fieldType)) {
-                val parser = simpleKetherParser(field.name) {
-                    field.get(this) as ScriptActionParser<Any>
+            else if (ScriptActionParser::class.java.isAssignableFrom(it.fieldType)) {
+                val parser = simpleKetherParser(it.name) {
+                    it.get(this) as ScriptActionParser<Any>
                 }
-                registerInternalCombinationParser(arrayOf(field.name),parser)
+                registerInternalCombinationParser(arrayOf(it.name),parser)
             }
         }
     }

@@ -61,30 +61,30 @@ object ActionEffect {
      * effect 【loader: action】 [option: string>]
      * effect line "FLAME 0 0 0 -speed 1.0 -count 10 @self" ontick
      */
-    @KetherParser(["effect"], namespace = NAMESPACE, shared = true)
-    fun parser() = scriptParser {
-        try {
-            it.mark()
-            val expect = it.expects(*Effects.effectKeys.toTypedArray())
-            val effectLoader = Effects.get(expect)
-            // 优先解析特殊粒子解析器
-            if (effectLoader is EffectParser) {
-                effectLoader.parser(it)
-            }
-            // 粒子默认解析器
-            else {
-                val option = it.nextParsedAction()
-                val events = it.maps()
-
-                Parser(effectLoader, option).also {
-                    it.events += events
-                }
-            }
-        } catch (e: Exception) {
-            it.reset()
-            throw e
-        }
-    }
+//    @KetherParser(["effect"], namespace = NAMESPACE, shared = true)
+//    fun parser() = scriptParser {
+//        try {
+//            it.mark()
+//            val expect = it.expects(*Effects.effectKeys.toTypedArray())
+//            val effectLoader = Effects.get(expect)
+//            // 优先解析特殊粒子解析器
+//            if (effectLoader is EffectParser) {
+//                effectLoader.parser(it)
+//            }
+//            // 粒子默认解析器
+//            else {
+//                val option = it.nextParsedAction()
+//                val events = it.maps()
+//
+//                Parser(effectLoader, option).also {
+//                    it.events += events
+//                }
+//            }
+//        } catch (e: Exception) {
+//            it.reset()
+//            throw e
+//        }
+//    }
 
     /**
      * 尝试获取一个maps

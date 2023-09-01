@@ -1,10 +1,10 @@
 package com.bh.planners.core.kether.compat.attribute
 
 import me.skymc.customized.monsteritem.api.event.AttributeLoadedEvent
-import me.skymc.customized.monsteritem.attribute.Attribute
-import me.skymc.customized.monsteritem.attribute.Value
-import me.skymc.customized.monsteritem.attribute.function.FunctionProfile
-import me.skymc.customized.monsteritem.attribute.source.DefaultSource
+import me.skymc.customized.monsteritem.core.attribute.Attribute
+import me.skymc.customized.monsteritem.core.attribute.Value
+import me.skymc.customized.monsteritem.core.attribute.function.FunctionProfile
+import me.skymc.customized.monsteritem.core.attribute.source.DefaultSource
 import org.bukkit.entity.LivingEntity
 import taboolib.common.platform.function.registerBukkitListener
 import java.util.*
