@@ -5,6 +5,7 @@ import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Platform
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.adaptCommandSender
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.info
 import taboolib.common5.Mirror
 import taboolib.module.chat.colored
@@ -25,13 +26,13 @@ object Planners : Plugin() {
 
     override fun onEnable() {
         Metrics(15573, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
-        info("&a┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".colored())
-        info("&a┃&e    _/_/_/    _/                                                           ".colored())
-        info("&a┃&e   _/    _/  _/    _/_/_/  _/_/_/    _/_/_/      _/_/    _/  _/_/    _/_/_/".colored())
-        info("&a┃&e  _/_/_/    _/  _/    _/  _/    _/  _/    _/  _/_/_/_/  _/_/      _/_/     ".colored())
-        info("&a┃&e _/        _/  _/    _/  _/    _/  _/    _/  _/        _/            _/_/  ".colored())
-        info("&a┃&e_/        _/    _/_/_/  _/    _/  _/    _/    _/_/_/  _/        _/_/_/     ".colored())
-        info("&a┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".colored())
+        console().sendMessage("&a┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".colored())
+        console().sendMessage("&a┃&e    _/_/_/    _/                                                           ".colored())
+        console().sendMessage("&a┃&e   _/    _/  _/    _/_/_/  _/_/_/    _/_/_/      _/_/    _/  _/_/    _/_/_/".colored())
+        console().sendMessage("&a┃&e  _/_/_/    _/  _/    _/  _/    _/  _/    _/  _/_/_/_/  _/_/      _/_/     ".colored())
+        console().sendMessage("&a┃&e _/        _/  _/    _/  _/    _/  _/    _/  _/        _/            _/_/  ".colored())
+        console().sendMessage("&a┃&e_/        _/    _/_/_/  _/    _/  _/    _/    _/_/_/  _/        _/_/_/     ".colored())
+        console().sendMessage("&a┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━".colored())
     }
 
     override fun onDisable() {

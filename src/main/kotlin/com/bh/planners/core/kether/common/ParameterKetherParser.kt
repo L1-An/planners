@@ -1,6 +1,6 @@
 package com.bh.planners.core.kether.common
 
-import com.bh.planners.util.Reflexs
+import taboolib.library.reflex.ReflexClass
 import taboolib.library.kether.ParsedAction
 import taboolib.library.kether.QuestActionParser
 import taboolib.library.kether.QuestReader
@@ -26,7 +26,7 @@ abstract class ParameterKetherParser(vararg id: String) : SimpleKetherParser(*id
     }
 
     override fun onInit() {
-        Reflexs.getFields(this::class.java).forEach { field ->
+        ReflexClass.of(this::class.java).structure.fields.forEach { field ->
 
             // ignored ...
             if (field.name == "INSTANCE" || field.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {

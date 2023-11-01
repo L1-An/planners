@@ -1,7 +1,7 @@
 package com.bh.planners.core.kether.common
 
 import com.bh.planners.core.kether.common.KetherHelper.simpleKetherParser
-import com.bh.planners.util.Reflexs
+import taboolib.library.reflex.ReflexClass
 import com.google.common.reflect.TypeToken
 import taboolib.library.kether.QuestActionParser
 import taboolib.module.kether.ScriptActionParser
@@ -33,7 +33,7 @@ abstract class MultipleKetherParser(vararg id: String) : SimpleKetherParser(*id)
 
     @Suppress("UNCHECKED_CAST")
     override fun onInit() {
-        Reflexs.getFields(this::class.java).forEach { field ->
+        ReflexClass.of(this::class.java).structure.fields.forEach { field ->
             // ignored ...
             if (field.name == "INSTANCE" || field.isAnnotationPresent(CombinationKetherParser.Ignore::class.java)) {
                 return@forEach
